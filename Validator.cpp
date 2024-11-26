@@ -15,6 +15,7 @@ T Validator::getValidInput(const std::string& prompt, std::function<void(const T
     {
         try
         {
+            // ****Originally wanted to use cerr for the error message but ran into buffer issues so this will have to do****
             std::cout << prompt;
             T value;
             std::cin >> value;
@@ -29,6 +30,8 @@ T Validator::getValidInput(const std::string& prompt, std::function<void(const T
 
             // Validate value using provided function
             validate(value);
+
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
             return value;
         } catch (const std::exception& e)
@@ -61,7 +64,7 @@ void Validator::validateString(const std::string& s)
 
 void Validator::validateDouble(const double d)
 {
-    if (d < 0 || d > 100)
+    if (d < 0.0 || d > 100.0)
     {
         throw std::out_of_range("Value must be a positive number and between 0 - 100.");
     }

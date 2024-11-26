@@ -16,6 +16,7 @@ public:
 private:
     IOHandler ioHandler;
     StudentManager studentManager;
+    GradeCalculator gradeCalculator;
 };
 
 #endif //SYSTEMCONTROLLER_H

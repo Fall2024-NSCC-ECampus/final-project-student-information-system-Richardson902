@@ -4,6 +4,7 @@
 
 #include "IOHandler.h"
 
+#include <algorithm>
 #include <iomanip>
 #include <limits>
 
@@ -29,20 +30,16 @@ void IOHandler::printMessage(const std::string& message)
     std::cout << message << std::endl;
 }
 
-void IOHandler::printStudentInfoPrompt()
+void IOHandler::waitForEnter()
 {
-    std::cout << "Enter student ID, first name, last name, midterm mark one, midterm mark two, and final mark:" << std::endl;
-    std::cout << "Example: 1234 John Doe 100, 100, 100" << std::endl;
+    std::cin.clear();
+    std::cout << "Press Enter to continue...";
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 }
 
 void IOHandler::printStudentRemoved(const int id)
 {
-    std::cout << "Student with ID" << id << " has been removed." << std::endl;
-}
-
-void IOHandler::printStudentNotFound(const int id)
-{
-    std::cout << "Student with ID" << id << "not found." << std::endl;
+    std::cout << "Student with ID: " << id << " has been removed." << std::endl;
 }
 
 void IOHandler::printUpdateOptions()
@@ -67,38 +64,75 @@ void IOHandler::printStudentDataHeader()
           << std::setw(10) << "Final" << '\n';
 }
 
+void IOHandler::printGradeHeader()
+{
+    std::cout << std::left
+            << std::setw(10) << "ID"
+            << std::setw(20) << "Name"
+            << std::setw(20) << "Lastname"
+            << std::setw(10) << "Grade" << '\n';
+}
+
+
 int IOHandler::getIntInput()
 {
     int input;
-    while (!(std::cin >> input)) // check if input fails
+    while (true)
     {
+        if (std::cin >> input)
+        {
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            return input;
+        }
+
         std::cin.clear(); // clear the error flag
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // discard the input
-        std::cout << "Invalid input. Please enter a number." << std::endl;
+        throw std::invalid_argument("Invalid input. Please enter a number.");
     }
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    return input;
 }
 
-// double IOHandler::getDoubleInput()
-// {
-//     double input;
-//     while (!(std::cin >> input)) // check if input fails
-//     {
-//         std::cin.clear(); // clear the error flag
-//         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // discard the input
-//         std::cout << "Invalid input. Please enter a number." << std::endl;
-//     }
-//     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-//     return input;
-// }
+double IOHandler::getDoubleInput()
+{
+    double input;
+    while (true)
+    {
+        if (std::cin >> input && input >= 1.0 && input <= 100.0)
+        {
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            return input;
+        }
+
+        std::cin.clear(); // clear the error flag
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // discard the input
+        throw std::out_of_range("Invalid input. Please enter a number between 1 and 100.");
+    }
+}
 
 std::string IOHandler::getStringInput()
 {
     std::string input;
     std::getline(std::cin >> std::ws, input);
+    std::ranges::transform(input, input.begin(), [](const unsigned char c){ return std::tolower(c); });
     return input;
 }
+
+char IOHandler::getCharInput()
+{
+    char input;
+    while (true)
+    {
+        if (std::cin >> input)
+        {
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            return input;
+        }
+
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        throw std::invalid_argument("Invalid input. Please enter y/n.");
+    }
+}
+
 
 
 

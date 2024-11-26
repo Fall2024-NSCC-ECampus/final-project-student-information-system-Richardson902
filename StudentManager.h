@@ -6,6 +6,8 @@
 #define STUDENTMANAGER_H
 
 #include <vector>
+
+#include "GradeCalculator.h"
 #include "Student.h"
 
 class StudentManager {
@@ -18,9 +20,13 @@ public:
     void deleteAllStudentData();
     void printAllStudentData();
     void printStudentData();
+    void printStudentsByLastName();
+    void calculateFinalGrades();
+    void checkStudents() const;
 
 private:
     std::vector<Student> students;
+    GradeCalculator gradeCalculator;
     auto findStudentById(int id);
 };
 

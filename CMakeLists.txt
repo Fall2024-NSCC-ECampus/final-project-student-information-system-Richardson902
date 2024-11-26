@@ -12,4 +12,6 @@ add_executable(student_information_system main.cpp
         SystemController.cpp
         Validator.h
         Validator.cpp
+        GradeCalculator.h
+        GradeCalculator.cpp
 )

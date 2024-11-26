@@ -12,14 +12,17 @@ class IOHandler {
 public:
     static void printMainMenu();
     static void printMessage(const std::string& message);
-    static void printStudentInfoPrompt();
+    static void waitForEnter();
     static void printStudentRemoved(int id);
-    static void printStudentNotFound(int id);
     static void printUpdateOptions();
     static void printStudentDataHeader();
+    static void printGradeHeader();
     [[nodiscard]] static int getIntInput();
     [[nodiscard]] static std::string getStringInput();
-    // [[nodiscard]] static double getDoubleInput();
+    [[nodiscard]] static double getDoubleInput();
+    [[nodiscard]] static char getCharInput();
+
+
 
 };
 

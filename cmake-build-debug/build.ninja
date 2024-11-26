@@ -79,6 +79,12 @@ build CMakeFiles/student_information_system.dir/Validator.cpp.obj: CXX_COMPILER_
   OBJECT_DIR = CMakeFiles\student_information_system.dir
   OBJECT_FILE_DIR = CMakeFiles\student_information_system.dir
 
+build CMakeFiles/student_information_system.dir/GradeCalculator.cpp.obj: CXX_COMPILER__student_information_system_unscanned_Debug G$:/.School/Year-2/Semester-1/PROG-2100/Assignments/Final/student-information-system/GradeCalculator.cpp || cmake_object_order_depends_target_student_information_system
+  DEP_FILE = CMakeFiles\student_information_system.dir\GradeCalculator.cpp.obj.d
+  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles\student_information_system.dir
+  OBJECT_FILE_DIR = CMakeFiles\student_information_system.dir
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target student_information_system
@@ -87,7 +93,7 @@ build CMakeFiles/student_information_system.dir/Validator.cpp.obj: CXX_COMPILER_
 #############################################
 # Link the executable student_information_system.exe
 
-build student_information_system.exe: CXX_EXECUTABLE_LINKER__student_information_system_Debug CMakeFiles/student_information_system.dir/main.cpp.obj CMakeFiles/student_information_system.dir/StudentManager.cpp.obj CMakeFiles/student_information_system.dir/IOHandler.cpp.obj CMakeFiles/student_information_system.dir/SystemController.cpp.obj CMakeFiles/student_information_system.dir/Validator.cpp.obj
+build student_information_system.exe: CXX_EXECUTABLE_LINKER__student_information_system_Debug CMakeFiles/student_information_system.dir/main.cpp.obj CMakeFiles/student_information_system.dir/StudentManager.cpp.obj CMakeFiles/student_information_system.dir/IOHandler.cpp.obj CMakeFiles/student_information_system.dir/SystemController.cpp.obj CMakeFiles/student_information_system.dir/Validator.cpp.obj CMakeFiles/student_information_system.dir/GradeCalculator.cpp.obj
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\student_information_system.dir

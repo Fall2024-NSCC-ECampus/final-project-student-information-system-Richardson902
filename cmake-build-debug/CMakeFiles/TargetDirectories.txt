@@ -1,0 +1,3 @@
+G:/.School/Year-2/Semester-1/PROG-2100/Assignments/Final/student-information-system/cmake-build-debug/CMakeFiles/student_information_system.dir
+G:/.School/Year-2/Semester-1/PROG-2100/Assignments/Final/student-information-system/cmake-build-debug/CMakeFiles/edit_cache.dir
+G:/.School/Year-2/Semester-1/PROG-2100/Assignments/Final/student-information-system/cmake-build-debug/CMakeFiles/rebuild_cache.dir

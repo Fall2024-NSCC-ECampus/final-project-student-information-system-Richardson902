@@ -23,10 +23,11 @@ public:
     void printStudentsByLastName();
     void calculateFinalGrades();
     void checkStudents() const;
-    void saveNewClass();
-    void overwriteClass();
+    void saveNewClass() const;
+    void overwriteClass() const;
     void loadClass();
     void listClassFiles() const;
+    static void printStudent(const Student& student) ;
 
 
 private:

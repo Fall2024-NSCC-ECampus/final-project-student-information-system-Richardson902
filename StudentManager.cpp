@@ -13,6 +13,8 @@
 #include <filesystem>
 #include <list>
 
+#include "FileHandler.h"
+
 
 StudentManager::StudentManager() = default;
 
@@ -142,13 +144,7 @@ void StudentManager::printStudentData()
         if (const auto it = findStudentById(id); it != students.end())
         {
             const auto& student = *it;
-            std::cout << std::left
-                      << std::setw(10) << student.id
-                      << std::setw(20) << student.firstName
-                      << std::setw(20) << student.lastName
-                      << std::setw(10) << student.midtermMarkOne
-                      << std::setw(10) << student.midtermMarkTwo
-                      << std::setw(10) << student.finalMark << '\n';
+            printStudent(student);
         }
     }
     catch (const std::exception& e)
@@ -158,6 +154,16 @@ void StudentManager::printStudentData()
 
 }
 
+void StudentManager::printStudent(const Student& student)
+{
+    std::cout << std::left
+              << std::setw(10) << student.id
+              << std::setw(20) << student.firstName
+              << std::setw(20) << student.lastName
+              << std::setw(10) << student.midtermMarkOne
+              << std::setw(10) << student.midtermMarkTwo
+              << std::setw(10) << student.finalMark << '\n';
+}
 
 void StudentManager::printAllStudentData()
 {
@@ -167,13 +173,7 @@ void StudentManager::printAllStudentData()
         IOHandler::printStudentDataHeader();
         for (const auto& student : students)
         {
-            std::cout << std::left
-                          << std::setw(10) << student.id
-                          << std::setw(20) << student.firstName
-                          << std::setw(20) << student.lastName
-                          << std::setw(10) << student.midtermMarkOne
-                          << std::setw(10) << student.midtermMarkTwo
-                          << std::setw(10) << student.finalMark << '\n';
+            printStudent(student);
 
         }
     }
@@ -200,13 +200,7 @@ void StudentManager::printStudentsByLastName()
         IOHandler::printStudentDataHeader();
         for (const auto& student: students)
         {
-            std::cout << std::left
-                        << std::setw(10) << student.id
-                        << std::setw(20) << student.firstName
-                        << std::setw(20) << student.lastName
-                        << std::setw(10) << student.midtermMarkOne
-                        << std::setw(10) << student.midtermMarkTwo
-                        << std::setw(10) << student.finalMark << '\n';
+            printStudent(student);
         }
     }
     catch (std::exception& e)
@@ -269,33 +263,14 @@ void StudentManager::checkStudents() const
     }
 }
 
-void StudentManager::saveNewClass()
+void StudentManager::saveNewClass() const
 {
     try
     {
         checkStudents();
         IOHandler::printMessage("Enter class name to save:");
         const std::string className = IOHandler::getStringInput();
-
-        std::filesystem::create_directories(defaultDirectory);
-
-        std::ofstream outFile(defaultDirectory + "/" + className + ".txt");
-        if (!outFile)
-        {
-            throw std::runtime_error("Unable to create file: " + className + ".txt");
-        }
-
-        for (const auto& student : students)
-        {
-            outFile << student.id << " "
-                    << student.firstName << " "
-                    << student.lastName << " "
-                    << student.midtermMarkOne << " "
-                    << student.midtermMarkTwo << " "
-                    << student.finalMark << '\n';
-        }
-        outFile.close();
-        IOHandler::printMessage("Class saved successfully.");
+        FileHandler::saveClass(defaultDirectory, className, students);
     }
     catch (std::exception& e)
     {
@@ -303,31 +278,16 @@ void StudentManager::saveNewClass()
     }
 }
 
-void StudentManager::overwriteClass() {
+void StudentManager::overwriteClass() const
+{
 
     try
     {
-        listClassFiles();
+        FileHandler::listClassFiles(defaultDirectory);
         checkStudents();
         IOHandler::printMessage("Enter class name to overwrite:");
         const std::string className = IOHandler::getStringInput();
-
-        std::filesystem::create_directories(defaultDirectory);
-
-        std::ofstream outFile(defaultDirectory + "/" + className + ".txt", std::ios::trunc);
-        if (!outFile) {
-            throw std::runtime_error("Unable to open file: " + className + ".txt");
-        }
-        for (const auto& student : students) {
-            outFile << student.id << " "
-                    << student.firstName << " "
-                    << student.lastName << " "
-                    << student.midtermMarkOne << " "
-                    << student.midtermMarkTwo << " "
-                    << student.finalMark << "\n";
-        }
-        outFile.close();
-        IOHandler::printMessage("Class overwritten successfully.");
+        FileHandler::saveClass(defaultDirectory, className, students);
     }
     catch (std::exception& e)
     {
@@ -337,21 +297,9 @@ void StudentManager::overwriteClass() {
 
 void StudentManager::listClassFiles() const
 {
-
     try
     {
-        if (!std::filesystem::exists(defaultDirectory))
-        {
-            throw std::runtime_error("Directory does not exist: " + defaultDirectory);
-        }
-
-        for (const auto& entry : std::filesystem::directory_iterator(defaultDirectory))
-        {
-            if (entry.is_regular_file() && entry.path().extension() == ".txt")
-            {
-                std::cout << entry.path().filename().string() << std::endl;
-            }
-        }
+        FileHandler::listClassFiles(defaultDirectory);
     }
     catch (const std::filesystem::filesystem_error& e)
     {
@@ -363,26 +311,10 @@ void StudentManager::loadClass()
 {
     try
     {
-        listClassFiles();
+        FileHandler::listClassFiles(defaultDirectory);
         IOHandler::printMessage("Enter class name to load:");
         const std::string className = IOHandler::getStringInput();
-
-        if (!std::filesystem::exists(defaultDirectory))
-        {
-            throw std::runtime_error("Directory does not exist: " + defaultDirectory);
-        }
-
-        std::ifstream inFile(defaultDirectory + "/" + className + ".txt");
-        if (!inFile) {
-            throw std::runtime_error("Unable to open file: " + className + ".txt");
-        }
-        students.clear();
-        Student student;
-        while (inFile >> student.id >> student.firstName >> student.lastName >> student.midtermMarkOne >> student.midtermMarkTwo >> student.finalMark) {
-            students.push_back(student);
-        }
-        inFile.close();
-        IOHandler::printMessage("Class loaded successfully.");
+        students = FileHandler::loadClass(defaultDirectory, className);
     }
     catch (std::exception& e)
     {

@@ -1,5 +1,5 @@
 //
-// Created by nick- on 11/23/2024.
+// Created by nick on 11/23/2024.
 //
 
 #ifndef STUDENTMANAGER_H
@@ -23,10 +23,16 @@ public:
     void printStudentsByLastName();
     void calculateFinalGrades();
     void checkStudents() const;
+    void saveNewClass();
+    void overwriteClass();
+    void loadClass();
+    void listClassFiles() const;
+
 
 private:
     std::vector<Student> students;
     GradeCalculator gradeCalculator;
+    std::string defaultDirectory = "./classes";
     auto findStudentById(int id);
 };
 

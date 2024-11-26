@@ -58,6 +58,21 @@ void SystemController::start()
             IOHandler::waitForEnter();
             break;
         case 10:
+            IOHandler::printMessage("");
+            studentManager.saveNewClass();
+            IOHandler::waitForEnter();
+            break;
+        case 11:
+            IOHandler::printMessage("");
+            studentManager.overwriteClass();
+            IOHandler::waitForEnter();
+            break;
+        case 12:
+            IOHandler::printMessage("");
+            studentManager.loadClass();
+            IOHandler::waitForEnter();
+            break;
+        case 13:
             return;
         default:
             IOHandler::printMessage("Invalid choice.");
@@ -66,8 +81,6 @@ void SystemController::start()
     }
 }
 
-//TODO add a press enter to continue button after displaying data
 //TODO mess around with format of update student
-//TODO make id unique
 
 

@@ -1,5 +1,5 @@
 //
-// Created by nick- on 11/23/2024.
+// Created by nick on 11/23/2024.
 //
 
 #include "StudentManager.h"
@@ -7,9 +7,11 @@
 #include "Validator.h"
 
 #include <algorithm>
+#include <fstream>
 #include <iostream>
 #include <iomanip>
-
+#include <filesystem>
+#include <list>
 
 
 StudentManager::StudentManager() = default;
@@ -266,6 +268,128 @@ void StudentManager::checkStudents() const
         throw std::runtime_error("No students found.");
     }
 }
+
+void StudentManager::saveNewClass()
+{
+    try
+    {
+        checkStudents();
+        IOHandler::printMessage("Enter class name to save:");
+        const std::string className = IOHandler::getStringInput();
+
+        std::filesystem::create_directories(defaultDirectory);
+
+        std::ofstream outFile(defaultDirectory + "/" + className + ".txt");
+        if (!outFile)
+        {
+            throw std::runtime_error("Unable to create file: " + className + ".txt");
+        }
+
+        for (const auto& student : students)
+        {
+            outFile << student.id << " "
+                    << student.firstName << " "
+                    << student.lastName << " "
+                    << student.midtermMarkOne << " "
+                    << student.midtermMarkTwo << " "
+                    << student.finalMark << '\n';
+        }
+        outFile.close();
+        IOHandler::printMessage("Class saved successfully.");
+    }
+    catch (std::exception& e)
+    {
+        IOHandler::printMessage(std::string("Error saving new class: ") + e.what());
+    }
+}
+
+void StudentManager::overwriteClass() {
+
+    try
+    {
+        listClassFiles();
+        checkStudents();
+        IOHandler::printMessage("Enter class name to overwrite:");
+        const std::string className = IOHandler::getStringInput();
+
+        std::filesystem::create_directories(defaultDirectory);
+
+        std::ofstream outFile(defaultDirectory + "/" + className + ".txt", std::ios::trunc);
+        if (!outFile) {
+            throw std::runtime_error("Unable to open file: " + className + ".txt");
+        }
+        for (const auto& student : students) {
+            outFile << student.id << " "
+                    << student.firstName << " "
+                    << student.lastName << " "
+                    << student.midtermMarkOne << " "
+                    << student.midtermMarkTwo << " "
+                    << student.finalMark << "\n";
+        }
+        outFile.close();
+        IOHandler::printMessage("Class overwritten successfully.");
+    }
+    catch (std::exception& e)
+    {
+        IOHandler::printMessage(std::string("Error overwriting class: ") + e.what());
+    }
+}
+
+void StudentManager::listClassFiles() const
+{
+
+    try
+    {
+        if (!std::filesystem::exists(defaultDirectory))
+        {
+            throw std::runtime_error("Directory does not exist: " + defaultDirectory);
+        }
+
+        for (const auto& entry : std::filesystem::directory_iterator(defaultDirectory))
+        {
+            if (entry.is_regular_file() && entry.path().extension() == ".txt")
+            {
+                std::cout << entry.path().filename().string() << std::endl;
+            }
+        }
+    }
+    catch (const std::filesystem::filesystem_error& e)
+    {
+        IOHandler::printMessage(std::string("Error accessing directory: ") + e.what());
+    }
+}
+
+void StudentManager::loadClass()
+{
+    try
+    {
+        listClassFiles();
+        IOHandler::printMessage("Enter class name to load:");
+        const std::string className = IOHandler::getStringInput();
+
+        if (!std::filesystem::exists(defaultDirectory))
+        {
+            throw std::runtime_error("Directory does not exist: " + defaultDirectory);
+        }
+
+        std::ifstream inFile(defaultDirectory + "/" + className + ".txt");
+        if (!inFile) {
+            throw std::runtime_error("Unable to open file: " + className + ".txt");
+        }
+        students.clear();
+        Student student;
+        while (inFile >> student.id >> student.firstName >> student.lastName >> student.midtermMarkOne >> student.midtermMarkTwo >> student.finalMark) {
+            students.push_back(student);
+        }
+        inFile.close();
+        IOHandler::printMessage("Class loaded successfully.");
+    }
+    catch (std::exception& e)
+    {
+        IOHandler::printMessage(std::string("Error loading class: ") + e.what());
+    }
+}
+
 
 
 

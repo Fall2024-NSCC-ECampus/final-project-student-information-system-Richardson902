@@ -20,7 +20,10 @@ void IOHandler::printMainMenu()
     std::cout << "7) Remove a student from the list" << std::endl;
     std::cout << "8) Delete ALL student data" << std::endl;
     std::cout << "9) Change grading scheme" << std::endl;
-    std::cout << "10) Exit" << std::endl;
+    std::cout << "10) Save class" << std::endl;
+    std::cout << "11) Overwrite current class" << std::endl;
+    std::cout << "12) Load class" << std::endl;
+    std::cout << "13) Exit" << std::endl;
     std::cout << "---------------------------------------------------------------" << std::endl;
 }
 

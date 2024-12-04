@@ -1,2 +1,1 @@
-1 nick rich 100 100 100
-2 joe dirt 50 50 50
+1 John Doe 90 90 90

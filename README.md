@@ -65,4 +65,4 @@ After building the project, you can run the application from the build directory
 Here is an example of what the output will look like when running the application:
 
 ### Loading a Class to Display Student Data
-![Loading a Class]()
+![Loading a Class](https://github.com/Fall2024-NSCC-ECampus/final-project-student-information-system-Richardson902/blob/main/output/load-class.JPG)

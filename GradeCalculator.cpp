@@ -9,7 +9,7 @@ double GradeCalculator::calculateWeightedAverage(const double midtermOne, const 
     if (midtermOne < 0.0 || midtermOne > 100.0 || midtermTwo < 0.0 || midtermTwo > 100.0 || final < 0.0 || final > 100.0) {
         throw std::invalid_argument("Invalid input: Marks should be between 0 and 100.");
     }
-    return (midtermOne * midtermOneWeight + midtermTwo * midtermTwoWeight + final * finalWeight);
+    return (midtermOne * midtermOneWeight + midtermTwo * midtermTwoWeight + final * finalWeight); // Calculate weighted average
 }
 
 char GradeCalculator::calculateLetterGrade(const double weightedAverage)

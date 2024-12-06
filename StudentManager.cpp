@@ -22,20 +22,22 @@ void StudentManager::addStudent()
 {
     try
     {
+        // Validate student ID
         const int id = Validator::getValidInput<int>("Enter ID:", Validator::validateInt);
 
-        if (std::ranges::any_of(students, [id](const Student& s) {return s.id == id; }))
+        if (std::ranges::any_of(students, [id](const Student& s) {return s.id == id; })) // Check if student with that ID already exists
         {
             throw std::runtime_error("Student with that ID already exists.");
         }
 
+        // Validate student data
         const auto firstName = Validator::getValidInput<std::string>("Enter first name:", Validator::validateString);
         const auto lastName = Validator::getValidInput<std::string>("Enter last name:", Validator::validateString);
         const auto midtermMarkOne = Validator::getValidInput<double>("Enter midterm mark one:", Validator::validateDouble);
         const auto midtermMarkTwo = Validator::getValidInput<double>("Enter midterm mark two:", Validator::validateDouble);
         const auto finalMark = Validator::getValidInput<double>("Enter final mark:", Validator::validateDouble);
 
-        students.emplace_back(id, firstName, lastName, midtermMarkOne, midtermMarkTwo, finalMark);
+        students.emplace_back(id, firstName, lastName, midtermMarkOne, midtermMarkTwo, finalMark); // Add student to list
         IOHandler::printMessage("Student added successfully.");
     }
     catch (std::exception& e)
@@ -47,17 +49,18 @@ void StudentManager::addStudent()
 auto StudentManager::findStudentById(int id)
 {
 
+    // Find student by ID
     const auto it = std::ranges::find_if(students, [id](const Student& s)
     {
         return s.id == id;
     });
 
-    if (it == students.end())
+    if (it == students.end()) // If student not found
     {
         throw std::runtime_error("Student not found");
     }
 
-    return it;
+    return it; // Return iterator to student
 }
 
 
@@ -71,7 +74,7 @@ void StudentManager::removeStudent()
 
         if (const auto it = findStudentById(id); it != students.end())
         {
-            students.erase(it);
+            students.erase(it); // Remove student
             IOHandler::printStudentRemoved(id);
         }
     }
@@ -140,10 +143,10 @@ void StudentManager::printStudentData()
         IOHandler::printMessage("Enter the student's ID you would like to view");
         const int id = IOHandler::getIntInput();
 
-        IOHandler::printStudentDataHeader();
+        IOHandler::printStudentDataHeader(); // Print header
         if (const auto it = findStudentById(id); it != students.end())
         {
-            const auto& student = *it;
+            const auto& student = *it; // Get student
             printStudent(student);
         }
     }
@@ -156,6 +159,7 @@ void StudentManager::printStudentData()
 
 void StudentManager::printStudent(const Student& student)
 {
+    // Print student data with formatting
     std::cout << std::left
               << std::setw(10) << student.id
               << std::setw(20) << student.firstName
@@ -171,7 +175,7 @@ void StudentManager::printAllStudentData()
     {
         checkStudents();
         IOHandler::printStudentDataHeader();
-        for (const auto& student : students)
+        for (const auto& student : students) // for each student print data
         {
             printStudent(student);
 
@@ -190,7 +194,7 @@ void StudentManager::printStudentsByLastName()
         checkStudents();
         std::ranges::sort(students, [](const Student& a, const Student& b)
         {
-            if (a.lastName == b.lastName)
+            if (a.lastName == b.lastName) // If last names are the same, sort by first name
             {
                 return a.firstName < b.firstName;
             }
@@ -198,7 +202,7 @@ void StudentManager::printStudentsByLastName()
         });
 
         IOHandler::printStudentDataHeader();
-        for (const auto& student: students)
+        for (const auto& student: students) // Print sorted students
         {
             printStudent(student);
         }
@@ -217,9 +221,11 @@ void StudentManager::calculateFinalGrades()
         IOHandler::printGradeHeader();
         for (const auto& student : students)
         {
+            // Calculate weighted average and letter grade
             const double weightedAverage = gradeCalculator.calculateWeightedAverage(student.midtermMarkOne, student.midtermMarkTwo, student.finalMark);
             const char letterGrade = GradeCalculator::calculateLetterGrade(weightedAverage);
 
+            // Print student data with letter grade formatted
             std::cout << std::left
                     << std::setw(10) << student.id
                     << std::setw(20) << student.firstName
@@ -239,9 +245,9 @@ void StudentManager::deleteAllStudentData()
     {
         checkStudents();
         IOHandler::printMessage("Are you sure you want to delete all students? (y/n)");
-        if (const auto response = IOHandler::getCharInput(); response == 'y' || response == 'Y')
+        if (const auto response = IOHandler::getCharInput(); response == 'y' || response == 'Y') // prompt user to confirm deletion
         {
-            students.clear();
+            students.clear(); // clear the list of students
             IOHandler::printMessage("All students have been deleted.");
         }
         else
@@ -257,7 +263,7 @@ void StudentManager::deleteAllStudentData()
 
 void StudentManager::checkStudents() const
 {
-    if (students.empty())
+    if (students.empty()) // if list empty, throw exception
     {
         throw std::runtime_error("No students found.");
     }
@@ -270,7 +276,7 @@ void StudentManager::saveNewClass() const
         checkStudents();
         IOHandler::printMessage("Enter class name to save:");
         const std::string className = IOHandler::getStringInput();
-        FileHandler::saveClass(defaultDirectory, className, students);
+        FileHandler::saveClass(defaultDirectory, className, students); // save class to file
     }
     catch (std::exception& e)
     {
@@ -287,7 +293,7 @@ void StudentManager::overwriteClass() const
         checkStudents();
         IOHandler::printMessage("Enter class name to overwrite:");
         const std::string className = IOHandler::getStringInput();
-        FileHandler::saveClass(defaultDirectory, className, students);
+        FileHandler::saveClass(defaultDirectory, className, students); // overwrite class file
     }
     catch (std::exception& e)
     {
@@ -299,7 +305,7 @@ void StudentManager::listClassFiles() const
 {
     try
     {
-        FileHandler::listClassFiles(defaultDirectory);
+        FileHandler::listClassFiles(defaultDirectory); // list all class files in directory
     }
     catch (const std::filesystem::filesystem_error& e)
     {
@@ -311,10 +317,10 @@ void StudentManager::loadClass()
 {
     try
     {
-        FileHandler::listClassFiles(defaultDirectory);
+        FileHandler::listClassFiles(defaultDirectory); // list all class files in directory
         IOHandler::printMessage("Enter class name to load:");
         const std::string className = IOHandler::getStringInput();
-        students = FileHandler::loadClass(defaultDirectory, className);
+        students = FileHandler::loadClass(defaultDirectory, className); // load class from file
     }
     catch (std::exception& e)
     {

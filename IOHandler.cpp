@@ -82,7 +82,7 @@ int IOHandler::getIntInput()
     int input;
     while (true)
     {
-        if (std::cin >> input)
+        if (std::cin >> input) // check if the input is an integer
         {
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             return input;
@@ -99,7 +99,7 @@ double IOHandler::getDoubleInput()
     double input;
     while (true)
     {
-        if (std::cin >> input && input >= 1.0 && input <= 100.0)
+        if (std::cin >> input && input >= 1.0 && input <= 100.0) // check if the input is a double between 1 and 100
         {
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             return input;
@@ -115,6 +115,8 @@ std::string IOHandler::getStringInput()
 {
     std::string input;
     std::getline(std::cin >> std::ws, input);
+
+    // Convert input to lowercase
     std::ranges::transform(input, input.begin(), [](const unsigned char c){ return std::tolower(c); });
     return input;
 }
@@ -124,7 +126,7 @@ char IOHandler::getCharInput()
     char input;
     while (true)
     {
-        if (std::cin >> input)
+        if (std::cin >> input) // check if the input is a char
         {
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             return input;

@@ -60,3 +60,9 @@ After building the project, you can run the application from the build directory
 ```bash
 ./student_information_system
 ```
+
+## Output
+Here is an example of what the output will look like when running the application:
+
+### Loading a Class to Display Student Data
+![Loading a Class]()
